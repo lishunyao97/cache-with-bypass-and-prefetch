@@ -41,24 +41,25 @@ int main(int argc, char * argv[]) {
 
 	StorageLatency l1l;
 	l1l.bus_latency = 0;
-	l1l.hit_latency = 4;
+	l1l.hit_latency = 3;
 	l1.SetLatency(l1l);
 
 	StorageLatency l2l;
 	l2l.bus_latency = 6;
-	l2l.hit_latency = 5;
+	l2l.hit_latency = 4;
 	l2.SetLatency(l2l);
 
-	char *filename;
-
+	char *filename = "2.trace";
+	/*
 	if (argc == 1) {
 		printf("Please input file name. Format: ./cache <filename>\n");
 		return 0;
 	}
 	if (argc == 2) {
 		filename = argv[1];
-	}
-	cout<<"--------------------"<<argv[1]<<"---------------------"<<endl;
+	}*/
+	//cout<<"--------------------"<<argv[1]<<"---------------------"<<endl;
+	cout << "------------------" << filename << "-------------------" << endl;
 	for(int i = 0; i < repeat; i++) {
 		int hit, time;
 		char content[64];
@@ -69,17 +70,16 @@ int main(int argc, char * argv[]) {
 			return -1;
 		}
 		else {
-				//cout << "success open" << endl;
 			string c;
-				//char hex_num[20];
-			uint64_t num;
+			char hex_num[20];
+			//uint64_t num;
 			while (!infile.eof()) {
-				infile >> c >> num;
-					//cout<<c<<" "<<num<<endl;
-					//infile >> c >> hex_num;
+				//infile >> c >> num;
+				//cout<<c<<" "<<num<<endl;
+				infile >> c >> hex_num;
 				if(infile.fail()) break;   
-					//long long unsigned num = 0;
-					//sscanf(hex_num, "%llx", &num);
+				long long unsigned num = 0;
+				sscanf(hex_num, "%llx", &num);
 				int read = 0;
 				if (c == "r") read = 1;
 				else if (c == "w") read = 0; 
@@ -118,8 +118,8 @@ int main(int argc, char * argv[]) {
 	printf("L1 miss rate: %lf%%\n", L1_miss_rate * 100);
 	printf("L2 miss rate: %lf%%\n", L2_miss_rate * 100);
 	//printf("Total access time: %dns\n", time1+time2+time3);
-	double L2_AMAT = 6 + 5 + L2_miss_rate * 100;
-	double L1_AMAT = 4 + L1_miss_rate * L2_AMAT;
+	double L2_AMAT = 6 + 4 + L2_miss_rate * 100;
+	double L1_AMAT = 3 + L1_miss_rate * L2_AMAT;
 	printf("AMAT: %lf\n", L1_AMAT);
 	printf("L1 dirty replace: %d\n",dirty1);
 	printf("L2 dirty replace: %d\n",dirty2);
