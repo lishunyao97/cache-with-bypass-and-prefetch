@@ -5,6 +5,7 @@
 #include <cmath>
 #include <vector>
 #include <set>
+#include <iterator>
 #include "storage.h"
 using namespace std;
 class CacheLine {
@@ -19,6 +20,7 @@ public:
 		recently_use = 0;
 		frequent_use = 0;
 		dirty = 0;
+        CRF = 0;
 		//byte = new int[block_size_];
 	}
 	~CacheLine() {
@@ -29,10 +31,12 @@ public:
 	int t; // t tag bits
 	uint64_t tag; // tag bits 
 	int block_size; // B
-	//int *byte; 
 	int recently_use;
 	int frequent_use;
 	int dirty;
+    int CRF;
+    set<int> CRF_access;
+    set<int>::iterator it;
 
 };
 class CacheSet {
@@ -115,6 +119,7 @@ private:
 	void PrefetchAlgorithm(uint64_t addr, int bytes, int read, char *content, int &hit, int &time);
 	int CapacityMiss(uint64_t tag_value, uint64_t set_value);
 	int SetIsFull(uint64_t set_value);
+    int CalculateCRF(uint64_t set_value, int line_value, int time_now);
 	CacheConfig config_;
 	Storage *lower_;
 	Storage *mem_;
